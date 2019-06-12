@@ -28,7 +28,7 @@ except ImportError:
 __all__ = ['AuthenticationRequired', 'to_datetime', 'BitBucket']
 
 api_toplevel = 'https://api.bitbucket.org/'
-api_base = '%s1.0/' % api_toplevel
+api_base = '%s2.0/' % api_toplevel
 
 
 class AuthenticationRequired(Exception):
@@ -136,15 +136,23 @@ class User(object):
         self.username = username
 
     def repositories(self):
-        user_data = self.get()
-        return user_data['repositories']
+        repos = self.get_repos()
+        return self.get_repos()['values']
 
     def get(self):
         if self.username is None:
             url = api_base + 'user/'
         else:
-            url = api_base + 'users/%s/' % self.username
+            url = api_base + 'teams/%s' % self.username
         return json.loads(self.bb.load_url(url).decode('utf-8'))
+
+    def get_repos(self):
+        if self.username is None:
+            url = api_base + 'user/'
+        else:
+            url = api_base + 'teams/%s/repositories' % self.username
+        return json.loads(self.bb.load_url(url).decode('utf-8'))
+
 
     def __repr__(self):
         return '<User: %s>' % self.username

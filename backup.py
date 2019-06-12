@@ -28,7 +28,7 @@ try:
 except NameError:
     _range = range
 
-_verbose = False
+_verbose = True
 _quiet = False
 
 
@@ -98,7 +98,7 @@ def clone_repo(repo, backup_dir, http, username, password, mirror=False, with_wi
     global _quiet, _verbose
     scm = repo.get('scm')
     slug = repo.get('slug')
-    owner = repo.get('owner')
+    owner = repo.get('owner')['username']
 
     owner_url = quote(owner)
     if http and not all((username, password)):
