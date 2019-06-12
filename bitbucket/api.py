@@ -136,7 +136,6 @@ class User(object):
         self.username = username
 
     def repositories(self):
-        repos = self.get_repos()
         return self.get_repos()['values']
 
     def get(self):
@@ -148,9 +147,9 @@ class User(object):
 
     def get_repos(self):
         if self.username is None:
-            url = api_base + 'user/'
+            raise Exception("username missing")
         else:
-            url = api_base + 'teams/%s/repositories' % self.username
+            url = api_base + 'repositories/%s?pagelen=100' % self.username
         return json.loads(self.bb.load_url(url).decode('utf-8'))
 
 
